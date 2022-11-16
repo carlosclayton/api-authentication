@@ -3,7 +3,6 @@ import {hash} from "bcrypt";
 import {injectable, singleton} from "tsyringe";
 import {IUsersRepository} from "./IUsersRepository";
 import {IUserDTO} from "../interfaces/IUserDTO";
-import {Role} from "../types/Role";
 
 
 @singleton()
