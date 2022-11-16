@@ -161,6 +161,85 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": ["User"],
+        "summary": "Destroy user",
+        "description": "Destroy user by ID",
+        "parameters":[ {
+          "name": "id",
+          "in": "path",
+          "schema": {
+            "type": "string",
+            "required": true
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Destroy with success"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["User"],
+        "summary": "Update user",
+        "description": "Update user",
+        "parameters":[ {
+          "name": "id",
+          "in": "path",
+          "schema": {
+            "type": "string",
+            "required": true
+          }
+        }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "driver_licence": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "name": "Name",
+                  "email": "E-mail",
+                  "username": "Username",
+                  "password": "Password",
+                  "driver_licence": "Driver licence",
+                  "role": "ADMIN|USER"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Updated"
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
       }
     }
   }
