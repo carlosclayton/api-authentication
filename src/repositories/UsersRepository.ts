@@ -3,6 +3,8 @@ import {hash} from "bcrypt";
 import {injectable, singleton} from "tsyringe";
 import {IUsersRepository} from "./IUsersRepository";
 import {IUserDTO} from "../interfaces/IUserDTO";
+import {AppError} from "../util/AppError";
+import {removeFile} from "../util/RemoveFile";
 
 
 @singleton()
@@ -17,7 +19,7 @@ export class UsersRepository implements IUsersRepository{
         })
 
         if (result) {
-            throw new Error("User already exist")
+            throw new AppError("User already exist")
         }
         const hasPassword = await hash(user.password, 10)
 
@@ -46,7 +48,7 @@ export class UsersRepository implements IUsersRepository{
                 },
             });
         }catch (e){
-            throw new Error("User not found")
+            throw new AppError("User not found")
         }
     }
 
@@ -67,7 +69,7 @@ export class UsersRepository implements IUsersRepository{
                 },
             });
         }catch (e){
-            throw new Error("User not found")
+            throw new AppError("User not found")
         }
     }
 
@@ -79,12 +81,18 @@ export class UsersRepository implements IUsersRepository{
                 },
             });
         }catch (e){
-            throw new Error("User not found")
+            throw new AppError("User not found")
         }
 
     }
 
     async avatar(id: string, filename: string): Promise<any> {
+        const user = await this.find(id);
+
+        if(user.avatar){
+            removeFile(`./uploads/${user.avatar}`)
+        }
+
         try{
             return await prisma.users.update({
                 where: {
@@ -95,7 +103,7 @@ export class UsersRepository implements IUsersRepository{
                 },
             });
         }catch (e){
-            throw new Error("User not found")
+            throw new AppError("User not found")
         }
     }
 }
