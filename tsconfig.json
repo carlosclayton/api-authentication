@@ -8,6 +8,7 @@
     "resolveJsonModule": true,
     "strictPropertyInitialization": false,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "typeRoots": ["./src/@types"]
   }
 }

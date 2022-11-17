@@ -32,5 +32,13 @@ export class UsersController {
         const result = await userService.destroy(id)
         return response.json(result)
     }
+
+    async avatar(request: Request, response: Response) {
+        const id  = request.id;
+        const file = request.file?.filename;
+        const result = await userService.avatar(id, file!)
+        return response.json(result)
+
+    }
 }
 

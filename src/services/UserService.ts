@@ -28,4 +28,9 @@ export class UserService {
         return this.userRepository.destroy(id);
     }
 
+    avatar(id: string, file: string ) {
+        return this.userRepository.avatar(id, file);
+    }
+
+
 }

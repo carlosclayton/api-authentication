@@ -83,4 +83,19 @@ export class UsersRepository implements IUsersRepository{
         }
 
     }
+
+    async avatar(id: string, filename: string): Promise<any> {
+        try{
+            return await prisma.users.update({
+                where: {
+                    id
+                },
+                data: {
+                    avatar: filename
+                },
+            });
+        }catch (e){
+            throw new Error("User not found")
+        }
+    }
 }

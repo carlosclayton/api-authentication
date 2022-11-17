@@ -14,7 +14,7 @@ export async function IsAuthentication(request: Request, response: Response, nex
 
     try {
         const {sub} = verify(token, process.env.HASH_KEY!) as IPayload;
-        // request.client_id = sub
+        request.id = sub;
         return next();
 
     } catch (err) {

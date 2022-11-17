@@ -4,6 +4,7 @@ import {injectable, singleton} from "tsyringe";
 import {IUserDTO} from "../interfaces/IUserDTO";
 import {IAuthRepository} from "./IAuthRepository";
 import {sign} from "jsonwebtoken";
+import {AppError} from "../util/AppError";
 
 
 @singleton()
@@ -18,12 +19,12 @@ export class AuthRepository implements IAuthRepository{
         })
 
         if (!result) {
-            throw new Error("Email or password incorrect")
+            throw new AppError("Email or password incorrect", 401)
         }
         const matchPassword = await compare(password, result.password);
 
         if (!matchPassword) {
-            throw new Error("Email or password incorrect")
+            throw new AppError("Email or password incorrect",401)
         }
 
         const token  = sign({}, process.env.HASH_KEY!, {
