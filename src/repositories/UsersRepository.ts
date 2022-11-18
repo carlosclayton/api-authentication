@@ -9,7 +9,7 @@ import {removeFile} from "../util/RemoveFile";
 
 @singleton()
 @injectable()
-export class UsersRepository implements IUsersRepository{
+export class UsersRepository implements IUsersRepository {
     async create(user: IUserDTO) {
 
         const result = await prisma.users.findFirst({
@@ -23,17 +23,20 @@ export class UsersRepository implements IUsersRepository{
         }
         const hasPassword = await hash(user.password, 10)
 
-
-        return  await prisma.users.create({
+        await prisma.users.create({
             data: {
                 name: user.name,
                 email: user.email,
                 username: user.username,
                 password: hasPassword,
-                driver_licence:user.driver_licence,
+                driver_licence: user.driver_licence,
                 role: user.role
             }
         })
+
+        return {
+            message: "User created"
+        }
     }
 
     async all(): Promise<any> {
@@ -41,21 +44,26 @@ export class UsersRepository implements IUsersRepository{
     }
 
     async destroy(id: string): Promise<any> {
-        try{
-            return await prisma.users.delete({
+        try {
+            await prisma.users.delete({
                 where: {
                     id
                 },
             });
-        }catch (e){
+
+        } catch (e) {
             throw new AppError("User not found")
+        }
+
+        return {
+            message: "User deleted"
         }
     }
 
     async update(id: string, user: IUserDTO): Promise<any> {
         const hasPassword = await hash(user.password, 10)
-        try{
-            return await prisma.users.update({
+        try {
+            await prisma.users.update({
                 where: {
                     id
                 },
@@ -64,23 +72,29 @@ export class UsersRepository implements IUsersRepository{
                     email: user.email,
                     username: user.username,
                     password: hasPassword,
-                    driver_licence:user.driver_licence,
+                    driver_licence: user.driver_licence,
                     role: user.role
                 },
             });
-        }catch (e){
+
+        } catch (e) {
             throw new AppError("User not found")
         }
+
+        return {
+            message: "User updated"
+        }
+
     }
 
     async find(id: string): Promise<any> {
-        try{
+        try {
             return await prisma.users.findUnique({
                 where: {
                     id
                 },
             });
-        }catch (e){
+        } catch (e) {
             throw new AppError("User not found")
         }
 
@@ -89,11 +103,11 @@ export class UsersRepository implements IUsersRepository{
     async avatar(id: string, filename: string): Promise<any> {
         const user = await this.find(id);
 
-        if(user.avatar){
+        if (user.avatar) {
             removeFile(`./uploads/${user.avatar}`)
         }
 
-        try{
+        try {
             return await prisma.users.update({
                 where: {
                     id
@@ -102,7 +116,7 @@ export class UsersRepository implements IUsersRepository{
                     avatar: filename
                 },
             });
-        }catch (e){
+        } catch (e) {
             throw new AppError("User not found")
         }
     }

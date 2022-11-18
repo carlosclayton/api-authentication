@@ -1,7 +1,6 @@
 import {prisma} from "../database/prismaClient";
 import {compare, hash} from "bcrypt";
 import {injectable, singleton} from "tsyringe";
-import {IUserDTO} from "../interfaces/IUserDTO";
 import {IAuthRepository} from "./IAuthRepository";
 import {sign} from "jsonwebtoken";
 import {AppError} from "../util/AppError";
@@ -31,6 +30,15 @@ export class AuthRepository implements IAuthRepository{
             subject: result.id,
             expiresIn: "1d"
         })
-        return {token}
+        return {
+            user: {
+                id: result.id,
+                name: result.name,
+                role: result.role,
+                avatar: result.avatar
+
+            },
+            token
+        }
     }
 }
