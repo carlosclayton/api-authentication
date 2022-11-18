@@ -19,7 +19,7 @@ export async function IsAuthentication(request: Request, response: Response, nex
 
     } catch (err) {
         return response.status(401).json({
-            message: "Invalid Token"
+            message: "Invalid token"
         })
     }
 }

@@ -29,6 +29,5 @@ app.use((
 })
 
 app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerFile))
-app.listen(3000, () => {
-    console.log("Listen Server...");
-});
+
+export {app}
