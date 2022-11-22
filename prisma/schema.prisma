@@ -16,17 +16,18 @@ enum Role {
 }
 
 model Users {
-  id             String   @id @default(uuid())
-  name           String   @db.VarChar(256)
-  username       String   @unique @db.VarChar(256)
-  password       String   @db.VarChar(256)
-  email          String   @db.VarChar(256)
-  driver_licence String   @db.VarChar(256)
-  role           Role     @default(USER)
-  created_at     DateTime @default(now())
-  avatar         String?  @db.VarChar(256)
+  id             String    @id @default(uuid())
+  name           String    @db.VarChar(256)
+  username       String    @unique @db.VarChar(256)
+  password       String    @db.VarChar(256)
+  email          String    @db.VarChar(256)
+  driver_licence String    @db.VarChar(256)
+  role           Role      @default(USER)
+  created_at     DateTime  @default(now())
+  avatar         String?   @db.VarChar(256)
+  token          String?   @unique @db.VarChar(256)
+  refresh_token  String?   @unique @db.VarChar(256)
+  expired_date   DateTime?
 
   @@map("users")
 }
-
-

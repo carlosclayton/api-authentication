@@ -73,7 +73,10 @@ export class UsersRepository implements IUsersRepository {
                     username: user.username,
                     password: hasPassword,
                     driver_licence: user.driver_licence,
-                    role: user.role
+                    role: user.role,
+                    token: user.token,
+                    refresh_token: user.refresh_token,
+                    expired_date: user.expired_date
                 },
             });
 

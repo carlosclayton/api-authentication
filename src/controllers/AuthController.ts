@@ -10,5 +10,11 @@ export class AuthController {
         return response.json(result)
     }
 
+    async refresh_token(request: Request, response: Response) {
+        const token = request.body.token || request.headers['x-access-token'] || request.query.token;
+        const result = await authService.refresh_token(token)
+        return response.json(result)
+    }
+
 }
 

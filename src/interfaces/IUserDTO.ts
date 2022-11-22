@@ -8,5 +8,8 @@ export interface IUserDTO{
     email: string;
     driver_licence: string;
     role?: Role;
+    token?: string;
+    refresh_token?: string;
+    expired_date?: Date;
     created_at?: Date
 }

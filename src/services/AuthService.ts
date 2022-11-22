@@ -12,4 +12,9 @@ export class AuthService {
     login(email: string, password:string) {
         return this.authRepository.login(email, password)
     }
+
+    refresh_token(token: string) {
+        return this.authRepository.refresh_token(token)
+    }
+
 }
