@@ -5,7 +5,8 @@ import {IAuthRepository} from "../repositories/IAuthRepository";
 @injectable()
 export class AuthService {
     constructor(
-        @inject("AuthRepository") public authRepository: IAuthRepository
+        @inject("AuthRepository")
+        public authRepository: IAuthRepository
     ) {
     }
 
@@ -15,6 +16,10 @@ export class AuthService {
 
     refresh_token(token: string) {
         return this.authRepository.refresh_token(token)
+    }
+
+    forgot(email: string){
+        return this.authRepository.forgot(email)
     }
 
 }

@@ -59,6 +59,79 @@
         }
       }
     },
+    "/auth/refresh_token": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Refresh token",
+        "description": "Refresh token",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "token": "Token"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "invalid signature"
+          },
+          "401": {
+            "description": "User doesn't not exist"
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/auth/forgot": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Forgot password",
+        "description": "Forgot password",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "email": "E-mail"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "User doesn't not exist"
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
     "/users": {
       "post": {
         "tags": ["User"],

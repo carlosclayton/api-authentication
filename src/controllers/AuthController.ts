@@ -16,5 +16,11 @@ export class AuthController {
         return response.json(result)
     }
 
+    async forgot(request: Request, response: Response){
+        const {email}: IUserDTO = request.body;
+        const result = await authService.forgot(email)
+        return response.json(result)
+    }
+
 }
 

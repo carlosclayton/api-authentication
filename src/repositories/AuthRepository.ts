@@ -9,12 +9,21 @@ import dayjs from "dayjs";
 import {verify} from "jsonwebtoken";
 import auth from "../config/auth";
 import {IPayload} from "../interfaces/IPayload";
+import { v4 as uuidv4 } from 'uuid';
+import {IDateProvider} from "../providers/IDateProvider";
+import {IMailProvider} from "../providers/IMailProvider";
 
 
 @singleton()
 @injectable()
 export class AuthRepository implements IAuthRepository {
-
+    constructor(
+        @inject("DateProvider")
+        private dateProvider: IDateProvider,
+        @inject("MailProvider")
+        private mailProvider: IMailProvider
+    ) {
+    }
     async login(email: string, password: string): Promise<any> {
 
         const user = await prisma.users.findFirst({
@@ -91,6 +100,36 @@ export class AuthRepository implements IAuthRepository {
 
         return  {
             "token": new_token
+        }
+
+    }
+
+    async forgot(email: string): Promise<any> {
+
+        const user = await prisma.users.findFirst({
+            where: {
+                email
+            },
+        })
+
+        if (!user) {
+            throw new AppError("User doesn't not exist", 401)
+        }
+
+        const token = uuidv4();
+        const expired_date = this.dateProvider.addHours(3);
+        await prisma.resetPassword.create({
+            data: {
+                userId: user.id,
+                token,
+                expired_date
+            }
+        })
+
+        await this.mailProvider.sendMail(email, "Password recovery", `Link to reset password: ${token}`)
+
+        return  {
+            "token": "Mail was sent"
         }
 
     }
