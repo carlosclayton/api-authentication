@@ -66,8 +66,7 @@ export class UsersRepository implements IUsersRepository {
             await prisma.users.update({
                 where: {
                     id
-                },
-                data: {
+                },data: {
                     name: user.name,
                     email: user.email,
                     username: user.username,
@@ -78,6 +77,7 @@ export class UsersRepository implements IUsersRepository {
                     refresh_token: user.refresh_token,
                     expired_date: user.expired_date
                 },
+
             });
 
         } catch (e) {

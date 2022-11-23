@@ -9,9 +9,10 @@ import dayjs from "dayjs";
 import {verify} from "jsonwebtoken";
 import auth from "../config/auth";
 import {IPayload} from "../interfaces/IPayload";
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 import {IDateProvider} from "../providers/IDateProvider";
 import {IMailProvider} from "../providers/IMailProvider";
+import {resolve} from "path";
 
 
 @singleton()
@@ -24,6 +25,7 @@ export class AuthRepository implements IAuthRepository {
         private mailProvider: IMailProvider
     ) {
     }
+
     async login(email: string, password: string): Promise<any> {
 
         const user = await prisma.users.findFirst({
@@ -80,12 +82,12 @@ export class AuthRepository implements IAuthRepository {
             }
         })
 
-        if(!user) {
+        if (!user) {
             throw new AppError("Refresh token doesn't not exist")
         }
 
-        const new_token =  new Token(user as Users).getToken();
-        const new_refresh_token =  new Token(user as Users).getRefreshToken();
+        const new_token = new Token(user as Users).getToken();
+        const new_refresh_token = new Token(user as Users).getRefreshToken();
 
         await prisma.users.update({
             where: {
@@ -98,13 +100,15 @@ export class AuthRepository implements IAuthRepository {
             },
         })
 
-        return  {
+        return {
             "token": new_token
         }
 
     }
 
     async forgot(email: string): Promise<any> {
+        const templatePath = resolve(__dirname, "..", "..", "src", "views", "emails", "resetPassword.hbs")
+
 
         const user = await prisma.users.findFirst({
             where: {
@@ -116,7 +120,14 @@ export class AuthRepository implements IAuthRepository {
             throw new AppError("User doesn't not exist", 401)
         }
 
+
         const token = uuidv4();
+        const variables = {
+            name: user.name,
+            link: `${process.env.FORGOT_MAIL_URL}${token}`
+
+        }
+
         const expired_date = this.dateProvider.addHours(3);
         await prisma.resetPassword.create({
             data: {
@@ -126,11 +137,49 @@ export class AuthRepository implements IAuthRepository {
             }
         })
 
-        await this.mailProvider.sendMail(email, "Password recovery", `Link to reset password: ${token}`)
-
-        return  {
+        await this.mailProvider.sendMail(
+            email,
+            "Password recovery",
+            variables,
+            templatePath
+        )
+        return {
             "token": "Mail was sent"
         }
+    }
 
+    async reset(token: string, password: string): Promise<any> {
+
+
+        const userToken = await prisma.resetPassword.findFirst({
+            where: {
+                token
+            },
+        })
+
+        if (!userToken) {
+            throw new AppError("Token doesn't not exist", 401)
+        }
+        console.log(this.dateProvider.dateNow())
+
+        if (this.dateProvider.compareIfBefore(userToken.expired_date!, this.dateProvider.dateNow())){
+            throw new AppError("Token expired", 401)
+        }
+
+        const hasPassword = await hash(password, 10);
+        const expired_date = dayjs().add(30, 'day').toDate()
+        await prisma.users.update({
+            where: {
+                id: userToken.userId
+            },
+            data: {
+                password: hasPassword,
+                expired_date
+            },
+        })
+
+        return {
+            "message": "Password updated"
+        }
     }
 }

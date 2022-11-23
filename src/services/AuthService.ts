@@ -22,4 +22,8 @@ export class AuthService {
         return this.authRepository.forgot(email)
     }
 
+    reset(token: string, password: string){
+        return this.authRepository.reset(token, password)
+    }
+
 }

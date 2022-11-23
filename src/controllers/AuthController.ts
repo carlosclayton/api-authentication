@@ -22,5 +22,13 @@ export class AuthController {
         return response.json(result)
     }
 
+    async reset(request: Request, response: Response){
+        const { token } = request.query;
+        const { password }: IUserDTO = request.body;
+        const result = await authService.reset(String(token), password)
+        return response.json(result)
+    }
+
+
 }
 

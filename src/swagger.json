@@ -132,6 +132,49 @@
         }
       }
     },
+    "/auth/reset/{token}": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Reset password",
+        "description": "Reset password",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "password": "E-mail"
+                }
+              }
+            }
+          }
+        },
+        "parameters":[ {
+          "name": "token",
+          "in": "path",
+          "schema": {
+            "type": "string",
+            "required": true
+          }
+        }],
+        "responses": {
+          "201": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "User doesn't not exist"
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
     "/users": {
       "post": {
         "tags": ["User"],
