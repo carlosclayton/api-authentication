@@ -3,7 +3,7 @@ import {UsersController} from "../controllers/UsersController";
 import {IsAuthentication} from "../middlewares/isAuthentication";
 import uploadConfig from "../util/Upload"
 import multer from "multer";
-const upload = multer(uploadConfig.upload("./uploads"))
+const upload = multer(uploadConfig)
 const userRouter = Router();
 const userController = new UsersController();
 

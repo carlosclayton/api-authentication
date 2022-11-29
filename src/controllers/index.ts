@@ -6,12 +6,12 @@ import {UserService} from "../services/UserService";
 import {AuthService} from "../services/AuthService";
 import {IAuthRepository} from "../repositories/IAuthRepository";
 import {AuthRepository} from "../repositories/AuthRepository";
-import {IDateProvider} from "../providers/IDateProvider";
 import {DateProvider} from "../providers/DateProvider";
 import {MailProvider} from "../providers/MailProvider";
+import {LocalStorageProvider} from "../providers/LocalStorageProvider";
 
 // User Di
-container.registerInstance<IUsersRepository>("UsersRepository", new UsersRepository)
+container.registerInstance<IUsersRepository>("UsersRepository", new UsersRepository(new LocalStorageProvider()))
 const userService = container.resolve(UserService)
 
 // Auth DI

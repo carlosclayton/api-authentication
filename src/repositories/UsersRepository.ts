@@ -1,15 +1,23 @@
 import {prisma} from "../database/prismaClient";
 import {hash} from "bcrypt";
-import {injectable, singleton} from "tsyringe";
+import {inject, injectable, singleton} from "tsyringe";
 import {IUsersRepository} from "./IUsersRepository";
 import {IUserDTO} from "../interfaces/IUserDTO";
 import {AppError} from "../util/AppError";
 import {removeFile} from "../util/RemoveFile";
+import {IStorageProvider} from "../providers/IStorageProvider";
+import {UserMap} from "../mappers/UserMap";
+import {Users} from "../models/Users";
 
 
 @singleton()
 @injectable()
 export class UsersRepository implements IUsersRepository {
+    constructor(
+        @inject("LocalStorageProvider")
+        private storageProvider: IStorageProvider
+    ) {
+    }
     async create(user: IUserDTO) {
 
         const result = await prisma.users.findFirst({
@@ -90,16 +98,23 @@ export class UsersRepository implements IUsersRepository {
 
     }
 
-    async find(id: string): Promise<any> {
+    async find(id: string): Promise<IUserDTO> {
+
         try {
-            return await prisma.users.findUnique({
+            const user =  await prisma.users.findFirst({
                 where: {
                     id
                 },
             });
+
+            // @ts-ignore
+            return UserMap.toDTO(user);
         } catch (e) {
             throw new AppError("User not found")
         }
+
+
+
 
     }
 
@@ -107,8 +122,9 @@ export class UsersRepository implements IUsersRepository {
         const user = await this.find(id);
 
         if (user.avatar) {
-            removeFile(`./uploads/${user.avatar}`)
+            await this.storageProvider.delete(user.avatar, "avatar")
         }
+        await this.storageProvider.save(filename, "avatar")
 
         try {
             return await prisma.users.update({

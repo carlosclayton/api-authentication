@@ -1,6 +1,5 @@
 import {Role} from "../types/Role";
 
-
 export interface IUserDTO{
     name:string;
     username: string;
@@ -9,6 +8,7 @@ export interface IUserDTO{
     driver_licence: string;
     role?: Role;
     token?: string;
+    avatar: string;
     refresh_token?: string;
     expired_date?: Date;
     created_at?: Date

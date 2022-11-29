@@ -160,6 +160,7 @@ export class AuthRepository implements IAuthRepository {
         if (!userToken) {
             throw new AppError("Token doesn't not exist", 401)
         }
+
         console.log(this.dateProvider.dateNow())
 
         if (this.dateProvider.compareIfBefore(userToken.expired_date!, this.dateProvider.dateNow())){

@@ -1,6 +1,7 @@
 import {inject, injectable} from "tsyringe";
 import {IUsersRepository} from "../repositories/IUsersRepository";
 import {IUserDTO} from "../interfaces/IUserDTO";
+import {UserMap} from "../mappers/UserMap";
 
 @injectable()
 export class UserService {
@@ -21,7 +22,7 @@ export class UserService {
     }
 
     find(id: string ) {
-        return this.userRepository.find(id);
+        return  this.userRepository.find(id);
     }
 
     destroy(id: string ) {
