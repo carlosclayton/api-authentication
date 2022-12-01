@@ -4,11 +4,8 @@ import {inject, injectable, singleton} from "tsyringe";
 import {IUsersRepository} from "./IUsersRepository";
 import {IUserDTO} from "../interfaces/IUserDTO";
 import {AppError} from "../util/AppError";
-import {removeFile} from "../util/RemoveFile";
 import {IStorageProvider} from "../providers/IStorageProvider";
 import {UserMap} from "../mappers/UserMap";
-import {Users} from "../models/Users";
-
 
 @singleton()
 @injectable()
@@ -112,9 +109,6 @@ export class UsersRepository implements IUsersRepository {
         } catch (e) {
             throw new AppError("User not found")
         }
-
-
-
 
     }
 

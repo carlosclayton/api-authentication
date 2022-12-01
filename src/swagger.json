@@ -175,6 +175,54 @@
         }
       }
     },
+    "/auth/register": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "User register",
+        "description": "User Register",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "driver_licence": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "name": "Name",
+                  "email": "E-mail",
+                  "username": "Username",
+                  "password": "Password",
+                  "driver_licence": "Driver licence"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
     "/users": {
       "post": {
         "tags": ["User"],

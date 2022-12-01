@@ -8,5 +8,6 @@ authRouter.post("/login", authController.login);
 authRouter.post("/refresh_token", authController.refresh_token);
 authRouter.post("/forgot", authController.forgot);
 authRouter.post("/reset", authController.reset);
+authRouter.post("/register", authController.register);
 export {authRouter};
 

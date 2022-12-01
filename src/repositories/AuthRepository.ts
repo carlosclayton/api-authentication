@@ -13,6 +13,7 @@ import {v4 as uuidv4} from 'uuid';
 import {IDateProvider} from "../providers/IDateProvider";
 import {IMailProvider} from "../providers/IMailProvider";
 import {resolve} from "path";
+import {IUserDTO} from "../interfaces/IUserDTO";
 
 
 @singleton()
@@ -182,5 +183,34 @@ export class AuthRepository implements IAuthRepository {
         return {
             "message": "Password updated"
         }
+    }
+
+    async register(name: string, username: string, email: string, password:string, driver_licence:string): Promise<any> {
+
+        const result = await prisma.users.findFirst({
+            where: {
+                email
+            }
+        })
+
+        if (result) {
+            throw new AppError("User already exist")
+        }
+        const hasPassword = await hash(password, 10)
+
+        await prisma.users.create({
+            data: {
+                name,
+                email,
+                username,
+                password: hasPassword,
+                driver_licence
+            }
+        })
+
+        return {
+            message: "User registered"
+        }
+
     }
 }

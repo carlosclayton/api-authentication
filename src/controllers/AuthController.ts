@@ -3,6 +3,7 @@ import {authService} from "./index";
 import {IUserDTO} from "../interfaces/IUserDTO";
 
 export class AuthController {
+
     async login(request: Request, response: Response) {
         const {email, password}: IUserDTO = request.body;
 
@@ -26,6 +27,13 @@ export class AuthController {
         const { token } = request.query;
         const { password }: IUserDTO = request.body;
         const result = await authService.reset(String(token), password)
+        return response.json(result)
+    }
+
+    async register(request: Request, response: Response) {
+        const {name, username, email, password, driver_licence}: IUserDTO = request.body;
+
+        const result = await authService.register(name, username, email, password, driver_licence)
         return response.json(result)
     }
 

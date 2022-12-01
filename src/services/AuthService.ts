@@ -26,4 +26,8 @@ export class AuthService {
         return this.authRepository.reset(token, password)
     }
 
+    register(name: string, username: string, email: string, password:string, driver_licence:string){
+        return this.authRepository.register(name, username, email, password, driver_licence);
+    }
+
 }
