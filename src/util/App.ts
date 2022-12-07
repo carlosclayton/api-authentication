@@ -6,8 +6,10 @@ import swaggerUI from "swagger-ui-express";
 import swaggerFile from "../swagger.json"
 import {NextFunction, Request, request, Response, response} from "express";
 import upload from "./Upload";
+import raterLimiter from "../middlewares/raterLimiter";
 
 const app = express();
+app.use(raterLimiter);
 app.use(express.json())
 app.use(routes)
 app.use("/avatar", express.static(`${upload.tmpFolder}/avatar`))
